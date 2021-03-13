@@ -8,7 +8,6 @@ import (
 	"os"
 
 	conn "github.com/sugarshin/conn"
-	goconfluence "github.com/virtomize/confluence-go-api"
 )
 
 func main() {
@@ -18,9 +17,9 @@ func main() {
 }
 
 func execute() error {
-	endpoint := flag.String("endpoint", os.Getenv("CON_ENDPOINT"), "confluence reset api endpoint")
-	username := flag.String("username", os.Getenv("CON_USERNAME"), "confluence username")
-	password := flag.String("password", os.Getenv("CON_PASSWORD"), "confluence password")
+	endpoint := flag.String("endpoint", os.Getenv("CONN_ENDPOINT"), "confluence reset api endpoint")
+	username := flag.String("username", os.Getenv("CONN_USERNAME"), "confluence username")
+	password := flag.String("password", os.Getenv("CONN_PASSWORD"), "confluence password or token")
 	if *endpoint == "" || *username == "" || *password == "" {
 		return errors.New("endpoint, username, password are required")
 	}
@@ -28,18 +27,18 @@ func execute() error {
 	subpageCmd := flag.NewFlagSet("subpage", flag.ExitOnError)
 	subpageCreate := subpageCmd.Bool("create", false, "create")
 	parentPageID := subpageCmd.String("parentPageID", "", "parent page id")
-	content := &goconfluence.Content{}
+	content := &conn.Content{}
 	json := jsonValue{content}
-	subpageCmd.Var(&json, "content", "Content JSON Unmarshal")
+	subpageCmd.Var(&json, "content", "content json unmarshal")
 	if len(os.Args) < 2 {
 		return errors.New("currently, expected 'subpage' subcommands")
 	}
-	con, err := conn.New(*endpoint, *username, *password)
+	client, err := conn.New(*endpoint, *username, *password)
 	if err != nil {
 		return err
 	}
 	switch os.Args[1] {
-	case "foo":
+	case "subpage":
 		subpageCmd.Parse(os.Args[2:])
 		if *subpageCreate == true {
 			if *parentPageID == "" {
@@ -47,7 +46,8 @@ func execute() error {
 			} else if json.String() != "" {
 				return errors.New("content is required")
 			}
-			if _, err := con.CreateSubPage(*parentPageID, content); err != nil {
+
+			if _, err := client.CreateSubPageContent(*parentPageID, content); err != nil {
 				return err
 			}
 		}
@@ -58,7 +58,7 @@ func execute() error {
 }
 
 type jsonValue struct {
-	Content *goconfluence.Content
+	Content *conn.Content
 }
 
 func (v jsonValue) Set(s string) error {

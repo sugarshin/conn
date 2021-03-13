@@ -1,34 +1,20 @@
-version: 2
-refs:
-  executor: &executor
-    docker:
-      - image: cimg/go:1.16
-  restore_go_modules_cache: &restore_go_modules_cache
-      name: Restore go modules cache
-      key: go-modules-cache-v1-{{ checksum "go.sum" }}
-  download_go_modules: &download_go_modules
-      name: Download go modules
-      command: go mod download
-  save_go_modules_cache: &save_go_modules_cache
-      name: Save go modules cache
-      key: go-modules-cache-v1-{{ checksum "go.sum" }}
-      paths:
-        - /go/pkg/mod/cache
+version: 2.1
+orbs:
+  go: circleci/go@1.5.0
 jobs:
   test_lint:
-    <<: *executor
+    executor:
+      name: go/default
+      tag: '1.16'
     steps:
       - checkout
-      - restore_cache: *restore_go_modules_cache
-      - run: *download_go_modules
-      - save_cache: *save_go_modules_cache
+      - go/load-cache
+      - go/mod-download
+      - go/save-cache
       - run:
           name: Lint
           command: go vet ./...
 workflows:
-  version: 2
   'Test and Lint':
     jobs:
       - test_lint
-
-

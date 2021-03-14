@@ -2,8 +2,6 @@
 
 The wrapper for [confluence-go-api](https://github.com/Virtomize/confluence-go-api)
 
-Currently, It's available is `subpage` utilities only.
-
 ## Installation
 
 ```sh
@@ -25,15 +23,15 @@ func main() {
 	if err != nil {
 		log.Fatal("failed")
 	}
-	c, err := client.CreateSubPageContent(parentPageID, content)
+	c, err := client.CreateChildPageContent(parentPageID, content)
 }
 ```
 
-### `CreateSubPageContentWithLatest`
+### `CreateChildContentWithLatest`
 
-### `CreateSubPageContentWith`
+### `CreateChildContentWith`
 
-### `CreateSubPageContent`
+### `CreateChildContent`
 
 ### `GetLatestChildPageContent`
 

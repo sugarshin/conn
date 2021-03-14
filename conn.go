@@ -21,8 +21,8 @@ func New(endpoint string, username string, password string) (*Client, error) {
 	return client, err
 }
 
-// CreateSubPageContent :
-func (client *Client) CreateSubPageContent(parentPageID string, data *goconfluence.Content) (*goconfluence.Content, error) {
+// CreateChildPageContent :
+func (client *Client) CreateChildPageContent(parentPageID string, data *goconfluence.Content) (*goconfluence.Content, error) {
 	ancestors := []goconfluence.Ancestor{
 		{
 			ID: parentPageID,
@@ -32,19 +32,19 @@ func (client *Client) CreateSubPageContent(parentPageID string, data *goconfluen
 	return client.CreateContent(data)
 }
 
-// CreateSubPageContentWithLatest :
-func (client *Client) CreateSubPageContentWithLatest(parentPageID string, with func(data *goconfluence.Content) *goconfluence.Content) (*goconfluence.Content, error) {
+// CreateChildPageContentWithLatest :
+func (client *Client) CreateChildPageContentWithLatest(parentPageID string, with func(data *goconfluence.Content) *goconfluence.Content) (*goconfluence.Content, error) {
 	content, err := client.GetLatestChildPageContent(parentPageID)
 	if err != nil {
 		return nil, err
 	}
 	data := with(content)
-	return client.CreateSubPageContent(parentPageID, data)
+	return client.CreateChildPageContent(parentPageID, data)
 }
 
-// CreateSubPageContentWith :
-func (client *Client) CreateSubPageContentWith(parentPageID string, with func() *goconfluence.Content) (*goconfluence.Content, error) {
-	return client.CreateSubPageContent(parentPageID, with())
+// CreateChildPageContentWith :
+func (client *Client) CreateChildPageContentWith(parentPageID string, with func() *goconfluence.Content) (*goconfluence.Content, error) {
+	return client.CreateChildPageContent(parentPageID, with())
 }
 
 // GetLatestChildPageContent :

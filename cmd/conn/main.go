@@ -19,40 +19,40 @@ func main() {
 func execute() error {
 	endpoint := flag.String("endpoint", os.Getenv("CONN_ENDPOINT"), "confluence reset api endpoint")
 	username := flag.String("username", os.Getenv("CONN_USERNAME"), "confluence username")
-	password := flag.String("password", os.Getenv("CONN_PASSWORD"), "confluence password or token")
-	if *endpoint == "" || *username == "" || *password == "" {
-		return errors.New("endpoint, username, password are required")
+	token := flag.String("token", os.Getenv("CONN_TOKEN"), "confluence token or password")
+	if *endpoint == "" || *username == "" || *token == "" {
+		return errors.New("endpoint, username, token are required")
 	}
 
-	subpageCmd := flag.NewFlagSet("subpage", flag.ExitOnError)
-	subpageCreate := subpageCmd.Bool("create", false, "create")
-	parentPageID := subpageCmd.String("parentPageID", "", "parent page id")
+	childpageCmd := flag.NewFlagSet("childpage", flag.ExitOnError)
+	childpageCreate := childpageCmd.Bool("create", false, "create")
+	parentPageID := childpageCmd.String("parentPageID", "", "parent page id")
 	content := &conn.Content{}
 	json := jsonValue{content}
-	subpageCmd.Var(&json, "content", "content json unmarshal")
+	childpageCmd.Var(&json, "content", "content json unmarshal")
 	if len(os.Args) < 2 {
-		return errors.New("currently, expected 'subpage' subcommands")
+		return errors.New("currently, expected 'childpage' subcommand")
 	}
-	client, err := conn.New(*endpoint, *username, *password)
+	client, err := conn.New(*endpoint, *username, *token)
 	if err != nil {
 		return err
 	}
 	switch os.Args[1] {
-	case "subpage":
-		subpageCmd.Parse(os.Args[2:])
-		if *subpageCreate == true {
+	case "childpage":
+		childpageCmd.Parse(os.Args[2:])
+		if *childpageCreate == true {
 			if *parentPageID == "" {
 				return errors.New("parentPageID is required")
 			} else if json.String() != "" {
 				return errors.New("content is required")
 			}
 
-			if _, err := client.CreateSubPageContent(*parentPageID, content); err != nil {
+			if _, err := client.CreateChildPageContent(*parentPageID, content); err != nil {
 				return err
 			}
 		}
 	default:
-		return errors.New("currently, expected 'subpage' subcommands")
+		return errors.New("currently, expected 'childpage' subcommand")
 	}
 	return nil
 }

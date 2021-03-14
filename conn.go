@@ -14,6 +14,12 @@ type Client struct {
 // Content is goconfluence.Content
 type Content = goconfluence.Content
 
+// Ancestor is goconfluence.Ancestor
+type Ancestor = goconfluence.Ancestor
+
+// Version is goconfluence.Version
+type Version = goconfluence.Version
+
 // New returns a new Client.
 func New(endpoint string, username string, password string) (*Client, error) {
 	api, err := goconfluence.NewAPI(endpoint, username, password)

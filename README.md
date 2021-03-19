@@ -27,11 +27,11 @@ func main() {
 }
 ```
 
-### `CreateChildContentWithLatest`
+### `CreateChildPageContentWithLatest`
 
-### `CreateChildContentWith`
+### `CreateChildPageContentWith`
 
-### `CreateChildContent`
+### `CreateChildPageContent`
 
 ### `GetLatestChildPageContent`
 

@@ -20,6 +20,15 @@ type Ancestor = goconfluence.Ancestor
 // Version is goconfluence.Version
 type Version = goconfluence.Version
 
+// Body is goconfluence.Body
+type Body = goconfluence.Body
+
+// Storage is goconfluence.Storage
+type Storage = goconfluence.Storage
+
+// Results is goconfluence.Results
+type Results = goconfluence.Results
+
 // New returns a new Client.
 func New(endpoint string, username string, password string) (*Client, error) {
 	api, err := goconfluence.NewAPI(endpoint, username, password)
@@ -28,7 +37,7 @@ func New(endpoint string, username string, password string) (*Client, error) {
 }
 
 // CreateChildPageContent :
-func (client *Client) CreateChildPageContent(parentPageID string, data *goconfluence.Content) (*goconfluence.Content, error) {
+func (client *Client) CreateChildPageContent(parentPageID string, data *Content) (*Content, error) {
 	ancestors := []goconfluence.Ancestor{
 		{
 			ID: parentPageID,
@@ -39,7 +48,7 @@ func (client *Client) CreateChildPageContent(parentPageID string, data *goconflu
 }
 
 // CreateChildPageContentWithLatest :
-func (client *Client) CreateChildPageContentWithLatest(parentPageID string, with func(data *goconfluence.Content) *goconfluence.Content) (*goconfluence.Content, error) {
+func (client *Client) CreateChildPageContentWithLatest(parentPageID string, with func(data *Content) *Content) (*Content, error) {
 	content, err := client.GetLatestChildPageContent(parentPageID)
 	if err != nil {
 		return nil, err
@@ -49,13 +58,13 @@ func (client *Client) CreateChildPageContentWithLatest(parentPageID string, with
 }
 
 // CreateChildPageContentWith :
-func (client *Client) CreateChildPageContentWith(parentPageID string, with func() *goconfluence.Content) (*goconfluence.Content, error) {
+func (client *Client) CreateChildPageContentWith(parentPageID string, with func() *Content) (*Content, error) {
 	return client.CreateChildPageContent(parentPageID, with())
 }
 
 // GetLatestChildPageContent :
-func (client *Client) GetLatestChildPageContent(parentPageID string) (*goconfluence.Content, error) {
-	content, err := client.GetChildPageContentWith(parentPageID, func(i int, _ goconfluence.Results, list []goconfluence.Results) bool {
+func (client *Client) GetLatestChildPageContent(parentPageID string) (*Content, error) {
+	content, err := client.GetChildPageContentWith(parentPageID, func(i int, _ Results, list []Results) bool {
 		if i == len(list)-1 {
 			return true
 		} else {
@@ -69,8 +78,8 @@ func (client *Client) GetLatestChildPageContent(parentPageID string) (*goconflue
 }
 
 // GetChildPageContentByID :
-func (client *Client) GetChildPageContentByID(parentPageID string, id string) (*goconfluence.Content, error) {
-	content, err := client.GetChildPageContentWith(parentPageID, func(_ int, results goconfluence.Results, _ []goconfluence.Results) bool {
+func (client *Client) GetChildPageContentByID(parentPageID string, id string) (*Content, error) {
+	content, err := client.GetChildPageContentWith(parentPageID, func(_ int, results Results, _ []Results) bool {
 		if results.ID == id {
 			return true
 		} else {
@@ -84,7 +93,7 @@ func (client *Client) GetChildPageContentByID(parentPageID string, id string) (*
 }
 
 // GetChildPageContentWith :
-func (client *Client) GetChildPageContentWith(parentPageID string, with func(index int, results goconfluence.Results, list []goconfluence.Results) bool) (*goconfluence.Content, error) {
+func (client *Client) GetChildPageContentWith(parentPageID string, with func(index int, results Results, list []Results) bool) (*Content, error) {
 	res, err := client.GetChildPages(parentPageID)
 	if err != nil {
 		return nil, err

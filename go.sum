@@ -10,3 +10,5 @@ github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/virtomize/confluence-go-api v1.2.10 h1:pzsrOI3R0x2uKGStRow70BJt6eWjoX/x7wTqtgqG3fc=
 github.com/virtomize/confluence-go-api v1.2.10/go.mod h1:43el1g3Po6h9p18rF0EasmYrNGilugPx7R/NgkVladA=
+github.com/virtomize/confluence-go-api v1.3.0 h1:0ejUtrwjBxG32pi4PzCdGItWXWCjdwQ4nwuOVTZGrf0=
+github.com/virtomize/confluence-go-api v1.3.0/go.mod h1:43el1g3Po6h9p18rF0EasmYrNGilugPx7R/NgkVladA=
